@@ -750,14 +750,14 @@ The CA SHOULD implement a process to screen proxy servers in order to prevent re
 
 This section defines the permitted processes and procedures for validating the Applicant's ownership or control of the domain.
 
-The CA MUST follow this process to choose an Authorization Domain Name "ADN" for validation of each applied-for FQDN or Wildcard Domain Name:
+The CA MUST follow this process when choosing an Authorization Domain Name "ADN" for validation of each applied-for FQDN or Wildcard Domain Name:
 
-0. Choose a validation method. If the applied-for FQDN or Wildcard Domain Name is a Wildcard Domain Name, the CA MUST choose a validation method that allows wildcard issuance. If the applied-for FQDN or Wildcard Domain Name is an Onion Domain Name, the CA MUST choose a validation method that allows Onion Domain Name issuance, and MUST use the full Onion Domain Name as the ADN.
+0. Choose a validation method. If the applied-for FQDN or Wildcard Domain Name is a Wildcard Domain Name, the CA MUST choose a validation method that allows wildcard issuance. If the applied-for FQDN or Wildcard Domain Name is an Onion Domain Name, the CA MUST choose a validation method that allows Onion Domain Name issuance.
 1. Initialize A to the applied-for FQDN or Wildcard Domain Name.
 2. Remove "\*." from the left-most portion of A, if present.
-3. Optionally, if allowed by the validation method, replace A with the result of a DNS CNAME lookup of A.
+3. Optionally, if the validation method allows CNAME lookups when choosing ADN, replace A with the result of a DNS CNAME lookup of A.
 4. Initialize B to the Base Domain Name of A.
-5. If the validation method allows pruning domain labels to choose ADN, prune N Domain Labels from A, from left to right. The CA MUST choose a positive value of N such that B is either a suffix of or equal to the resulting A.
+5. If the validation method allows pruning domain labels when choosing ADN, prune N Domain Labels from A, from left to right. The CA MUST choose a positive value of N such that B is either a suffix of or equal to the resulting A.
 6. Use A as the ADN for this validation.
 
 
@@ -801,7 +801,9 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method does not allow CNAME lookups when choosing ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -834,7 +836,9 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method does not allow CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.5 Domain Authorization Document
 
@@ -859,7 +863,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.8 IP Address
 
@@ -870,6 +876,8 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.9 Test Certificate
 
@@ -889,7 +897,9 @@ Confirming the Applicant's control over the ADN by validating the Applicant is t
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method does not allow CNAME lookups when choosing ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -910,7 +920,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.14 Email to DNS TXT Contact
 
@@ -924,7 +936,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.15 Phone Contact with Domain Contact
 
@@ -938,7 +952,9 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method does not allow CNAME lookups when choosing ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -966,7 +982,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.17 Phone Contact with DNS CAA Phone Contact
 
@@ -982,7 +1000,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 ##### 3.2.2.4.18 Agreed-Upon Change to Website v2
 
@@ -1017,6 +1037,8 @@ This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
 
+This method allows CNAME lookups when choosing ADN.
+
 This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.19 Agreed-Upon Change to Website - ACME
@@ -1041,6 +1063,8 @@ This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
 
+This method allows CNAME lookups when choosing ADN.
+
 This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.20 TLS Using ALPN
@@ -1055,6 +1079,8 @@ This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
 
+This method allows CNAME lookups when choosing ADN.
+
 This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.21 DNS Labeled with Account ID - ACME
@@ -1067,7 +1093,9 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning domain labels to choose ADN.
+This method allows pruning domain labels when choosing ADN.
+
+This method allows CNAME lookups when choosing ADN.
 
 #### 3.2.2.5 Authentication for an IP Address
 
@@ -3656,7 +3684,7 @@ Table: CRLReasons
 | certificateHold           | 6    | MUST NOT be included if the CRL entry is for 1) a Certificate subject to these Requirements, or 2) a Certificate not subject to these Requirements and was either A) issued on-or-after 2020-09-30 or B) has a `notBefore` on-or-after 2020-09-30.
 | privilegeWithdrawn        | 9    | Indicates that there has been a subscriber-side infraction that has not resulted in keyCompromise, such as the Certificate Subscriber provided misleading information in their Certificate Request or has not upheld their material obligations under the Subscriber Agreement or Terms of Use. |
 
-The Subscriber Agreement, or an online resource referenced therein, MUST inform Subscribers about the revocation reason options listed above and provide explanation about when to choose each option. Tools that the CA provides to the Subscriber MUST allow for these options to be easily specified when the Subscriber requests revocation of their Certificate, with the default value being that no revocation reason is provided (i.e. the default corresponds to the CRLReason "unspecified (0)" which results in no reasonCode extension being provided in the CRL). 
+The Subscriber Agreement, or an online resource referenced therein, MUST inform Subscribers about the revocation reason options listed above and provide explanation about when when choosing each option. Tools that the CA provides to the Subscriber MUST allow for these options to be easily specified when the Subscriber requests revocation of their Certificate, with the default value being that no revocation reason is provided (i.e. the default corresponds to the CRLReason "unspecified (0)" which results in no reasonCode extension being provided in the CRL). 
 
 The privilegeWithdrawn reasonCode SHOULD NOT be made available to the Subscriber as a revocation reason option, because the use of this reasonCode is determined by the CA and not the Subscriber.
 
@@ -4054,7 +4082,9 @@ This appendix defines permissible verification procedures for including one or m
 
       This method allows wildcard issuance.
 
-      This method allows pruning domain labels to choose ADN.
+      This method allows pruning domain labels when choosing ADN.
+
+      This method does not allow CNAME lookups when choosing ADN.
 
       This method allows Onion Domain Name issuance.
 
