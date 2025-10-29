@@ -752,17 +752,16 @@ This section defines the permitted processes and procedures for validating the A
 
 The CA MUST follow this process to choose an Authorization Domain Name "ADN" for validation of each applied-for FQDN or Wildcard Domain Name:
 
-0. Choose a validation method. If the applied-for FQDN or Wildcard Domain Name is a Wildcard Domain Name, the CA MUST choose a validation method that allows wildcard issuance.
-1. Initialize ADN to the applied-for FQDN or Wildcard Domain Name.
-2. Remove "\*." from the left-most portion of ADN, if present.
-3. Optionally, if allowed by the validation method, replace ADN with the result of a DNS CNAME lookup of ADN.
-4. Initialize BDN to the Base Domain Name of ADN.
-5. If the validation method allows pruning, prune N Domain Labels from ADN, from left to right. The CA MUST choose a positive value of N such that BDN is either a suffix of or equal to the resulting ADN.
+0. Choose a validation method. If the applied-for FQDN or Wildcard Domain Name is a Wildcard Domain Name, the CA MUST choose a validation method that allows wildcard issuance. If the applied-for FQDN or Wildcard Domain Name is an Onion Domain Name, the CA MUST choose a validation method that allows Onion Domain Name issuance, and MUST use the full Onion Domain Name as the ADN.
+1. Initialize A to the applied-for FQDN or Wildcard Domain Name.
+2. Remove "\*." from the left-most portion of A, if present.
+3. Optionally, if allowed by the validation method, replace A with the result of a DNS CNAME lookup of A.
+4. Initialize B to the Base Domain Name of A.
+5. If the validation method allows pruning domain labels to choose ADN, prune N Domain Labels from A, from left to right. The CA MUST choose a positive value of N such that B is either a suffix of or equal to the resulting A.
+6. Use A as the ADN for this validation.
 
-The CA SHALL confirm that prior to issuance, the CA has validated an ADN for each FQDN or Wildcard Domain Name listed in the Certificate as follows:
 
-1. When the FQDN or Wildcard Domain Name is not an Onion Domain Name, the CA SHALL validate it using at least one of the methods listed below; and
-2. When the FQDN or Wildcard Domain Name is an Onion Domain Name, the CA SHALL validate it in accordance with Appendix B.
+When the is an Onion Domain Name, the CA SHALL validate it in accordance with Appendix B.
 
 Completed validations of Applicant authority may be valid for the issuance of multiple Certificates over time. In all cases, the validation must have been initiated within the time period specified in the relevant requirement (such as [Section 4.2.1](#421-performing-identification-and-authentication-functions) of this document) prior to Certificate issuance. For purposes of domain validation, the term Applicant includes the Applicant's Parent Company, Subsidiary Company, or Affiliate.
 
@@ -802,7 +801,7 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -835,7 +834,7 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.5 Domain Authorization Document
 
@@ -860,7 +859,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.8 IP Address
 
@@ -868,7 +867,7 @@ Confirming the Applicant's control over the ADN by confirming that the Applicant
 
 CAs performing validations using this method MUST implement Multi-Perspective Issuance Corroboration as specified in [Section 3.2.2.9](#3229-multi-perspective-issuance-corroboration). To count as corroborating, a Network Perspective MUST observe the same IP address as the Primary Network Perspective.
 
-This method does not allow wildcard issuance.
+This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
 
@@ -890,7 +889,7 @@ Confirming the Applicant's control over the ADN by validating the Applicant is t
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -911,7 +910,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.14 Email to DNS TXT Contact
 
@@ -925,7 +924,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.15 Phone Contact with Domain Contact
 
@@ -939,7 +938,7 @@ The Random Value SHALL remain valid for use in a confirming response for no more
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 Effective January 15, 2025:
 - When issuing Subscriber Certificates, the CA MUST NOT rely on Domain Contact information obtained using an HTTPS website, regardless of whether previously obtained information is within the allowed reuse period.
@@ -967,7 +966,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.17 Phone Contact with DNS CAA Phone Contact
 
@@ -983,7 +982,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 ##### 3.2.2.4.18 Agreed-Upon Change to Website v2
 
@@ -1014,9 +1013,11 @@ If a Random Value is used, then:
 
 Except for Onion Domain Names, CAs performing validations using this method MUST implement Multi-Perspective Issuance Corroboration as specified in [Section 3.2.2.9](#3229-multi-perspective-issuance-corroboration). To count as corroborating, a Network Perspective MUST observe the same challenge information (i.e. Random Value or Request Token) as the Primary Network Perspective.
 
-This method does not allow wildcard issuance.
+This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
+
+This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.19 Agreed-Upon Change to Website - ACME
 
@@ -1036,9 +1037,11 @@ If the CA follows redirects, the following apply:
 
 Except for Onion Domain Names, CAs performing validations using this method MUST implement Multi-Perspective Issuance Corroboration as specified in [Section 3.2.2.9](#3229-multi-perspective-issuance-corroboration). To count as corroborating, a Network Perspective MUST observe the same challenge information (i.e. token) as the Primary Network Perspective.
 
-This method does not allow wildcard issuance.
+This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
+
+This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.20 TLS Using ALPN
 
@@ -1048,9 +1051,11 @@ The token (as defined in RFC 8737, Section 3) MUST NOT be used for more than 30 
 
 Except for Onion Domain Names, CAs performing validations using this method MUST implement Multi-Perspective Issuance Corroboration as specified in [Section 3.2.2.9](#3229-multi-perspective-issuance-corroboration). To count as corroborating, a Network Perspective MUST observe the same challenge information (i.e. token) as the Primary Network Perspective.
 
-This method does not allow wildcard issuance.
+This method MUST NOT be used for wildcard issuance.
 
 This method does not allow pruning.
+
+This method allows Onion Domain Name issuance.
 
 ##### 3.2.2.4.21 DNS Labeled with Account ID - ACME
 
@@ -1062,7 +1067,7 @@ CAs performing validations using this method MUST implement Multi-Perspective Is
 
 This method allows wildcard issuance.
 
-This method allows pruning.
+This method allows pruning domain labels to choose ADN.
 
 #### 3.2.2.5 Authentication for an IP Address
 
@@ -4006,21 +4011,17 @@ The DNS TXT record MUST be placed on the "`_validation-contactphone`" subdomain 
 
 This appendix defines permissible verification procedures for including one or more Onion Domain Names in a Certificate.
 
-1. The Domain Name MUST contain at least two Domain Labels, where the rightmost Domain Label is "onion", and the Domain Label immediately preceding the rightmost "onion" Domain Label is a valid Version 3 Onion Address, as defined in Section 6 of the Tor Rendezvous Specification - Version 3 located at <https://spec.torproject.org/rend-spec-v3>.
+1. The Authorization Domain Name MUST contain at least two Domain Labels, where the rightmost Domain Label is "onion", and the Domain Label immediately preceding the rightmost "onion" Domain Label is a valid Version 3 Onion Address, as defined in Section 6 of the Tor Rendezvous Specification - Version 3 located at <https://spec.torproject.org/rend-spec-v3>.
 
-2. The CA MUST verify the Applicant’s control over the Onion Domain Name using at least one of the methods listed below:
+2. The CA MUST verify the Applicant’s control over the Authorization Domain Name using at least one of the methods listed below:
 
-   a. The CA MAY verify the Applicant's control over the .onion service by using one of the following methods from [Section 3.2.2.4](#3224-validation-of-domain-authorization-or-control):
+   a. The CA MAY verify the Applicant's control over the ADN by using any method from [Section 3.2.2.4](#3224-validation-of-domain-authorization-or-control) that says "This method allows Onion Domain Name issuance", with this modification:
 
-      i. [Section 3.2.2.4.18 - Agreed-Upon Change to Website v2](#322418-agreed-upon-change-to-website-v2)
-      ii. [Section 3.2.2.4.19 - Agreed-Upon Change to Website - ACME](#322419-agreed-upon-change-to-website---acme)
-      iii. [Section 3.2.2.4.20 - TLS Using ALPN](#322420-tls-using-alpn)
+      When these methods are used to verify the Applicant's control over an Onion Domain Name, the CA MUST use Tor protocol to establish a connection to the Authorization Domain Name. The CA MUST NOT delegate or rely on a third-party to establish the connection, such as by using Tor2Web.
 
-      When these methods are used to verify the Applicant's control over the .onion service, the CA MUST use Tor protocol to establish a connection to the .onion hidden service. The CA MUST NOT delegate or rely on a third-party to establish the connection, such as by using Tor2Web.
+      **Note**: This section does not override or supersede any provisions specified within the respective methods. The CA MUST only use a method if it is still permitted within that section.
 
-      **Note**: This section does not override or supersede any provisions specified within the respective methods. The CA MUST only use a method if it is still permitted within that section and MUST NOT issue Wildcard Certificates or use it as an Authorization Domain Name, except as specified by that method.
-
-   b. The CA MAY verify the Applicant's control over the .onion service by having the Applicant provide a Certificate Request signed using the .onion service's private key if the Attributes section of the certificationRequestInfo contains:
+   b. The CA MAY verify the Applicant's control over the .onion service corresponding to the Authorization Domain Name by having the Applicant provide a Certificate Request signed using the .onion service's private key if the Attributes section of the certificationRequestInfo contains:
 
       i. A caSigningNonce attribute that contains a Random Value that is generated by the CA; and
       ii. An applicantSigningNonce attribute that contains a single value. The CA MUST recommend to Applicants that the applicantSigningNonce value should contain at least 64 bits of entropy.
@@ -4053,6 +4054,8 @@ This appendix defines permissible verification procedures for including one or m
 
       This method allows wildcard issuance.
 
-      This method allows pruning.
+      This method allows pruning domain labels to choose ADN.
+
+      This method allows Onion Domain Name issuance.
 
 3. When a Certificate includes an Onion Domain Name, the Domain Name shall not be considered an Internal Name provided that the Certificate was issued in compliance with this [Appendix B](#appendix-b--issuance-of-certificates-for-onion-domain-names).
